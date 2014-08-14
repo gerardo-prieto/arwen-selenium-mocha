@@ -15,30 +15,18 @@ test.describe('ARWEN Test Suite', function() {
   var driver;
 
   var capabilities = {
-    'browserName' : 'phantomjs', 
+    'browserName' : 'firefox', 
     'logLevel': 'silent',
   }
 
-var caps = {
-  'browserName': 'android',
-  'version' : '4.3',
-  'deviceName' : 'Samsung Galaxy S4 Emulator',
-  'device-orientation' : 'portrait',
-  'host': 'ondemand.saucelabs.com',
-  'port': '80',
-  'username': process.env.SAUCE_USERNAME,
-  'accessKey': process.env.SAUCE_ACCESS_KEY,
-}
 
 
   test.before(function() {
     driver = new webdriver.Builder().
     withCapabilities(capabilities). 
     build();
-    driver.manage().timeouts().implicitlyWait(6000, 1000); 
+    driver.manage().timeouts().implicitlyWait(30000, 1000); 
   });
-
-
 
 
   test.it('POST - Anonymous', function() {
@@ -58,10 +46,9 @@ var caps = {
     driver.findElement(webdriver.By.id("text-email")).clear();
     driver.findElement(webdriver.By.id("text-email")).sendKeys("robot_test@olx.com");
     driver.findElement(webdriver.By.xpath("//div[@class='formActions']/div/input[@type='submit']")).click();
-    driver.findElement(webdriver.By.xpath("//a[contains(@href,'testing-iid')]")).click();
     driver.wait(function() {
       return driver.getPageSource().then(function(res) {
-        return expect(res).to.contain("Title for testing");
+        return expect(res).to.contain("title-for-testing-iid");
       });
     }, 8000);
   });
@@ -91,10 +78,9 @@ var caps = {
     driver.findElement(webdriver.By.id("text-email")).clear();
     driver.findElement(webdriver.By.id("text-email")).sendKeys("robot_test@olx.com");
     driver.findElement(webdriver.By.xpath("//div[@class='formActions']/div/input[@type='submit']")).click();
-    driver.findElement(webdriver.By.xpath("//a[contains(@href,'testing-iid')]")).click();
     driver.wait(function() {
       return driver.getPageSource().then(function(res) {
-        return expect(res).to.contain("Title for testing");
+        return expect(res).to.contain("title-for-testing-iid");
       });
     }, 8000);
   });
@@ -131,7 +117,7 @@ test.it('LOGOUT - Logout with valid user', function() {
     driver.findElement(webdriver.By.xpath("//a[contains(@href,'/logout')]")).click();
     driver.wait(function() {
       return driver.getPageSource().then(function(res) {
-        return expect(res).to.contain("user loggedOut");
+        return expect(res).to.contain("/login");
       });
     }, 8000);
   });
@@ -183,7 +169,7 @@ test.it('SEARCH - Search logged in', function() {
     driver.findElement(webdriver.By.name("search")).clear();
     driver.findElement(webdriver.By.name("search")).sendKeys("a");
     driver.findElement(webdriver.By.className("submit")).click();
-    driver.findElement(webdriver.By.xpath("//*[@class='imageCont'][1]")).click();
+    driver.findElement(webdriver.By.xpath("//li//a[contains(@href,'iid')][1]")).click();
     driver.wait(function() {
       return driver.findElement(webdriver.By.id("itemPage")).then(function(res) {
         return driver.findElement(webdriver.By.id("itemPage"));
@@ -202,10 +188,9 @@ test.it('ITEM PAGE - Reply an Ad', function() {
     driver.findElement(webdriver.By.name("password")).clear();
     driver.findElement(webdriver.By.name("password")).sendKeys("robotium2014");
     driver.findElement(webdriver.By.name("submit")).click();
-    driver.findElement(webdriver.By.name("search")).clear();
-    driver.findElement(webdriver.By.name("search")).sendKeys("a");
-    driver.findElement(webdriver.By.className("submit")).click();
-    driver.findElement(webdriver.By.xpath("//*[@class='imageCont'][1]")).click();
+    driver.findElement(webdriver.By.xpath("//a[@class='user loggedIn']")).click();
+    driver.findElement(webdriver.By.xpath("//a[contains(@href,'myadslisting')]")).click();
+    driver.findElement(webdriver.By.xpath("//h2[contains(text(),'Curso de Hindi')]")).click();
     driver.findElement(webdriver.By.xpath("//a[contains(@href,'/reply')]")).click();
     driver.findElement(webdriver.By.name("message")).clear();
     driver.findElement(webdriver.By.name("message")).sendKeys("Reply message for testing");
@@ -225,7 +210,6 @@ test.it('ITEM PAGE - Reply an Ad', function() {
 
 
 
-/*
 test.it('ITEM PAGE - Add Remove to Favorites', function() {
     driver.manage().deleteAllCookies();
     driver.get(baseURL + '/?location=&language=en-US');
@@ -252,7 +236,7 @@ test.it('ITEM PAGE - Add Remove to Favorites', function() {
       });
     }, 8000);
   });
-*/
+
 
 
 test.it('MYOLX - Go to My Ads', function() {
@@ -311,7 +295,6 @@ test.it('REGISTER - Register new user', function() {
       });
     }, 8000);
   });
-
 
 
   test.after(function() { driver.quit(); });
