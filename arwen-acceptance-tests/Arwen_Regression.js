@@ -15,7 +15,7 @@ test.describe('ARWEN Test Suite', function() {
   var driver;
 
   var capabilities = {
-    'browserName' : 'firefox', 
+    'browserName' : 'phantomjs', 
     'logLevel': 'silent',
   }
 
